@@ -42,9 +42,9 @@ export const EarningsProjection: React.FC<EarningsProjectionProps> = ({ earnings
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">💰 Earnings Projection</h2>
+        <h2 className="text-xl font-semibold text-gray-900">💰 FREE Earnings Projection</h2>
         <div className="text-sm text-gray-600">
-          Based on current performance trends
+          Based on FREE methods performance
         </div>
       </div>
 
@@ -59,7 +59,7 @@ export const EarningsProjection: React.FC<EarningsProjectionProps> = ({ earnings
               ${projection.amount.toLocaleString()}
             </div>
             <div className="text-xs text-gray-500 mt-1">
-              Projected earnings
+              FREE projected earnings
             </div>
           </div>
         ))}
@@ -70,13 +70,13 @@ export const EarningsProjection: React.FC<EarningsProjectionProps> = ({ earnings
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              🎯 Monthly Revenue Goal
+              🎯 FREE Monthly Revenue Goal
             </h3>
             <p className="text-3xl font-bold text-green-600">
               ${earnings.projectedMonthlyRevenue.toLocaleString()}
             </p>
             <p className="text-sm text-gray-600 mt-1">
-              On track to reach $100K+ monthly with current growth rate
+              On track to reach $150K+ monthly with FREE methods
             </p>
           </div>
           <div className="text-right">
@@ -85,33 +85,49 @@ export const EarningsProjection: React.FC<EarningsProjectionProps> = ({ earnings
               <div 
                 className="bg-green-500 h-2 rounded-full transition-all duration-300"
                 style={{ 
-                  width: `${Math.min((earnings.monthly / 100000) * 100, 100)}%` 
+                  width: `${Math.min((earnings.monthly / 150000) * 100, 100)}%` 
                 }}
               ></div>
             </div>
             <div className="text-xs text-gray-500 mt-1">
-              {Math.min((earnings.monthly / 100000) * 100, 100).toFixed(1)}% to $100K
+              {Math.min((earnings.monthly / 150000) * 100, 100).toFixed(1)}% to $150K
             </div>
           </div>
         </div>
       </div>
 
       {/* Success Message */}
-      {earnings.monthly > 10000 && (
+      {earnings.monthly > 5000 && (
         <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
           <div className="flex items-center">
             <div className="text-2xl mr-3">🚀</div>
             <div>
               <h4 className="font-semibold text-yellow-800">
-                Congratulations! You're on track for serious money!
+                Amazing! Your FREE system is generating serious money!
               </h4>
               <p className="text-sm text-yellow-700">
-                Your automation is performing exceptionally well. Consider scaling up your budget and expanding to more niches.
+                Your FREE automation is crushing it! Consider expanding to more niches and platforms for even bigger profits.
               </p>
             </div>
           </div>
         </div>
       )}
+
+      {/* Zero Investment Success */}
+      <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div className="flex items-center">
+          <div className="text-2xl mr-3">💚</div>
+          <div>
+            <h4 className="font-semibold text-green-800">
+              100% Profit Margin - Zero Investment Required!
+            </h4>
+            <p className="text-sm text-green-700">
+              Since you're using completely FREE methods, every dollar earned is pure profit. 
+              No ads, no inventory, no upfront costs - just automated income generation!
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

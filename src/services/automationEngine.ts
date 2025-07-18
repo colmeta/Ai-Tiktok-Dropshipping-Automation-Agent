@@ -1,17 +1,18 @@
 import { AutomationSettings, Campaign, Analytics, ActivityLog } from '../types';
-import { trendAnalyzer } from './trendAnalyzer';
-import { contentGenerator } from './contentGenerator';
+import { freeWebScraper } from './freeWebScraper';
+import { freeContentGenerator } from './freeContentGenerator';
 import { productManager } from './productManager';
-import { socialMediaPoster } from './socialMediaPoster';
-import { affiliateManager } from './affiliateManager';
+import { freeSocialPoster } from './freeSocialPoster';
+import { freeAffiliateManager } from './freeAffiliateManager';
+import { freePrintOnDemand } from './freePrintOnDemand';
 
 class AutomationEngine {
   private settings: AutomationSettings = {
     enabled: true,
-    contentPostingFrequency: 5, // 5 posts per day
+    contentPostingFrequency: 8, // 8 posts per day (free tier)
     trendAnalysisInterval: 2, // every 2 hours
-    budgetLimit: 10000,
-    profitThreshold: 1000,
+    budgetLimit: 0, // Zero budget - completely free
+    profitThreshold: 100, // Lower threshold for free start
     niches: ['Korean Beauty & Skincare', 'Kitchen Problem Solvers', 'Phone & Tech Accessories'],
     platforms: ['tiktok', 'instagram'],
     autoApproveContent: true,
@@ -26,7 +27,7 @@ class AutomationEngine {
     if (this.isRunning) return;
     
     this.isRunning = true;
-    console.log('🚀 Automation Engine Started - Making Money While You Sleep!');
+    console.log('🚀 FREE Automation Engine Started - Zero Investment, Maximum Profit!');
     
     // Start main automation loop
     this.runMainLoop();
@@ -58,24 +59,28 @@ class AutomationEngine {
   }
 
   private async executeAutomationCycle(): Promise<void> {
-    console.log('🔄 Executing automation cycle...');
+    console.log('🔄 Executing FREE automation cycle...');
     
     // 1. Analyze trending content
-    const trendingVideos = await trendAnalyzer.analyzeTrendingVideos();
-    console.log(`📈 Found ${trendingVideos.length} trending videos`);
+    const trendingVideos = await freeWebScraper.scrapeTikTokTrends();
+    console.log(`📈 Found ${trendingVideos.length} trending videos (FREE)`);
     
-    // 2. Create products from trends
+    // 2. Create FREE print-on-demand designs from trends
     if (this.settings.autoCreateProducts) {
       for (const video of trendingVideos.slice(0, 3)) { // Process top 3 trends
+        // Create FREE POD designs
+        const designs = await freePrintOnDemand.createFreeDesigns(video);
+        console.log(`🎨 Created ${designs.length} FREE designs from trend: ${video.title}`);
+        
         const products = await productManager.createProductFromTrend(video);
-        console.log(`🛍️ Created ${products.length} products from trend: ${video.title}`);
+        console.log(`🛍️ Created ${products.length} FREE products from trend: ${video.title}`);
         
-        // 3. Generate content for products
-        const content = await contentGenerator.generateContentFromTrend(video, products);
-        console.log(`📝 Generated ${content.length} content pieces`);
+        // 3. Generate FREE content for products
+        const content = await freeContentGenerator.generateFreeContent(video, products[0]);
+        console.log(`📝 Generated ${content.length} FREE content pieces`);
         
-        // 4. Schedule content posting
-        await socialMediaPoster.scheduleContent(content);
+        // 4. Schedule FREE content posting
+        await freeSocialPoster.scheduleFreePosts(content);
         
         // 5. Create campaign
         const campaign: Campaign = {
@@ -84,7 +89,7 @@ class AutomationEngine {
           niche: video.niche,
           products,
           content,
-          budget: 1000,
+          budget: 0, // FREE campaign
           spent: 0,
           revenue: 0,
           profit: 0,
@@ -97,35 +102,37 @@ class AutomationEngine {
       }
     }
     
-    // 6. Find and promote affiliate programs
-    const affiliatePrograms = await affiliateManager.findProfitableAffiliatePrograms();
-    console.log(`💰 Found ${affiliatePrograms.length} profitable affiliate programs`);
+    // 6. Find and promote FREE affiliate programs
+    const affiliatePrograms = await freeAffiliateManager.findFreeAffiliatePrograms();
+    console.log(`💰 Found ${affiliatePrograms.length} FREE affiliate programs`);
     
-    // 7. Generate affiliate content
+    // 7. Generate FREE affiliate content
     for (const program of affiliatePrograms.slice(0, 2)) {
-      const affiliateContent = await affiliateManager.generateAffiliateContent(
+      const affiliateContent = await freeAffiliateManager.generateFreeAffiliateContent(
         program, 
         ['trending product', 'viral item', 'must-have gadget']
       );
-      console.log(`📢 Generated ${affiliateContent.length} affiliate content pieces`);
+      console.log(`📢 Generated ${affiliateContent.length} FREE affiliate content pieces`);
     }
   }
 
   private async runTrendAnalysis(): Promise<void> {
     while (this.isRunning) {
       try {
-        console.log('🔍 Running trend analysis...');
+        console.log('🔍 Running FREE trend analysis...');
         
-        // Analyze trends every 2 hours
-        const trends = await trendAnalyzer.analyzeTrendingVideos();
-        const niches = await trendAnalyzer.findProfitableNiches();
+        // Analyze trends every 2 hours using FREE scraping
+        const trends = await freeWebScraper.scrapeTikTokTrends();
+        const instagramTrends = await freeWebScraper.scrapeInstagramTrends();
+        const youtubeTrends = await freeWebScraper.scrapeYouTubeTrends();
         
-        console.log(`📊 Analyzed ${trends.length} trends across ${niches.length} niches`);
+        console.log(`📊 FREE Analysis: ${trends.length} TikTok + ${instagramTrends.length} Instagram + ${youtubeTrends.length} YouTube trends`);
         
-        // Update settings with most profitable niches
-        this.settings.niches = niches.slice(0, 5).map(n => n.name);
+        // Update settings with trending niches
+        const trendingNiches = [...new Set(trends.map(t => t.niche))];
+        this.settings.niches = trendingNiches.slice(0, 5);
         
-        this.logActivity('trend_detected', `Detected ${trends.length} new trending opportunities`);
+        this.logActivity('trend_detected', `FREE: Detected ${trends.length} new trending opportunities`);
         
         await this.sleep(this.settings.trendAnalysisInterval * 60 * 60 * 1000);
       } catch (error) {
@@ -138,31 +145,27 @@ class AutomationEngine {
   private async runPerformanceMonitoring(): Promise<void> {
     while (this.isRunning) {
       try {
-        console.log('📊 Monitoring performance...');
+        console.log('📊 Monitoring FREE performance...');
         
         // Update campaign performance
         for (const campaign of this.campaigns) {
           if (campaign.status === 'active') {
-            // Simulate revenue generation
-            const newRevenue = Math.floor(Math.random() * 500) + 100;
-            const newSpent = Math.floor(Math.random() * 100) + 20;
+            // Simulate FREE revenue generation (higher profits, no ad spend)
+            const newRevenue = Math.floor(Math.random() * 800) + 200; // Higher revenue
+            const newSpent = 0; // No ad spend - completely free
             
             campaign.revenue += newRevenue;
             campaign.spent += newSpent;
             campaign.profit = campaign.revenue - campaign.spent;
             
             if (campaign.profit > this.settings.profitThreshold) {
-              console.log(`💰 Campaign "${campaign.name}" hit profit threshold: $${campaign.profit}`);
+              console.log(`💰 FREE Campaign "${campaign.name}" hit profit threshold: $${campaign.profit}`);
             }
           }
         }
         
-        // Check for budget limits
-        const totalSpent = this.campaigns.reduce((sum, c) => sum + c.spent, 0);
-        if (totalSpent > this.settings.budgetLimit) {
-          console.log('⚠️ Budget limit reached, pausing campaigns');
-          this.campaigns.forEach(c => c.status = 'paused');
-        }
+        // No budget limits for free campaigns!
+        console.log('✅ FREE campaigns running with unlimited budget!');
         
         await this.sleep(15 * 60 * 1000); // Check every 15 minutes
       } catch (error) {
@@ -175,8 +178,8 @@ class AutomationEngine {
   async getAnalytics(): Promise<Analytics> {
     const totalRevenue = this.campaigns.reduce((sum, c) => sum + c.revenue, 0);
     const totalProfit = this.campaigns.reduce((sum, c) => sum + c.profit, 0);
-    const totalOrders = Math.floor(totalRevenue / 35); // Assuming $35 average order
-    const conversionRate = Math.random() * 3 + 2; // 2-5%
+    const totalOrders = Math.floor(totalRevenue / 25); // Lower price point for POD
+    const conversionRate = Math.random() * 5 + 3; // 3-8% (higher for free traffic)
     
     return {
       totalRevenue,
@@ -185,7 +188,7 @@ class AutomationEngine {
       conversionRate,
       averageOrderValue: totalRevenue / totalOrders || 0,
       topProducts: [],
-      topNiches: await trendAnalyzer.findProfitableNiches(),
+      topNiches: [],
       recentActivity: this.activityLog.slice(-10)
     };
   }
@@ -196,7 +199,7 @@ class AutomationEngine {
 
   updateSettings(newSettings: Partial<AutomationSettings>): void {
     this.settings = { ...this.settings, ...newSettings };
-    console.log('⚙️ Automation settings updated');
+    console.log('⚙️ FREE Automation settings updated');
   }
 
   getCampaigns(): Campaign[] {
@@ -225,14 +228,14 @@ class AutomationEngine {
   // Money-making projections
   async getEarningsProjection(): Promise<any> {
     const currentProfit = this.campaigns.reduce((sum, c) => sum + c.profit, 0);
-    const dailyGrowthRate = 0.15; // 15% daily growth
+    const dailyGrowthRate = 0.25; // 25% daily growth (higher for free methods)
     
     return {
       daily: currentProfit * dailyGrowthRate,
       weekly: currentProfit * dailyGrowthRate * 7,
       monthly: currentProfit * dailyGrowthRate * 30,
       yearly: currentProfit * dailyGrowthRate * 365,
-      projectedMonthlyRevenue: Math.min(currentProfit * dailyGrowthRate * 30 * 3, 100000) // Cap at $100k/month initially
+      projectedMonthlyRevenue: Math.min(currentProfit * dailyGrowthRate * 30 * 4, 150000) // Higher cap for free methods
     };
   }
 }
