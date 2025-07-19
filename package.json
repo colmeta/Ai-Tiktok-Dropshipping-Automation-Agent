@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Zero-cost AI automation for TikTok dropshipping and affiliate marketing",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js",
