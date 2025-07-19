@@ -5,17 +5,45 @@ import path from 'path';
 import cron from 'node-cron';
 import puppeteer from 'puppeteer';
 import axios from 'axios';
+import express from 'express';
+import cors from 'cors';
 import { config } from 'dotenv';
 config();
 
-// Import automation modules (you'll need to create these)
-// import TrendAnalyzer from './src/trendAnalyzer.js';
-// import ContentGenerator from './src/contentGenerator.js';
-// import ProductManager from './src/productManager.js';
-// import SocialPoster from './src/socialPoster.js';
-// import AffiliateManager from './src/affiliateManager.js';
-// import PrintOnDemandManager from './src/printOnDemandManager.js';
-// import Logger from './src/logger.js';
+// Create Express server for health checks
+const app = express();
+const PORT = process.env.PORT || 8000;
+
+app.use(cors());
+app.use(express.json());
+
+// Health check endpoint
+app.get('/', (req, res) => {
+  const stats = engine ? engine.getStats() : { status: 'starting' };
+  res.json({
+    status: 'running',
+    message: '🤖 AI TikTok Dropshipping Automation Agent is running!',
+    stats: stats,
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+app.get('/stats', (req, res) => {
+  const stats = engine ? engine.getStats() : { status: 'initializing' };
+  res.json(stats);
+});
+
+// Start Express server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🌐 Server running on port ${PORT}`);
+  console.log(`🤖 FREE AI TikTok Dropshipping Automation Agent`);
+  console.log(`💰 Zero Investment, Maximum Profit System`);
+  console.log(`🚀 Starting automation engine...`);
+});
 
 // Temporary placeholder classes until you create the real modules
 class TrendAnalyzer {
@@ -369,24 +397,23 @@ class AutomationEngine {
   }
 }
 
-// Start the automation engine
-async function main() {
-  console.log('🤖 FREE AI TikTok Dropshipping Automation Agent');
-  console.log('💰 Zero Investment, Maximum Profit System');
-  console.log('🚀 Starting automation engine...\n');
+// Global engine instance
+let engine;
 
-  const engine = new AutomationEngine();
+// Start the automation engine after server is running
+setTimeout(async () => {
+  engine = new AutomationEngine();
   
   // Handle graceful shutdown
   process.on('SIGINT', async () => {
     console.log('\n🛑 Shutting down automation engine...');
-    await engine.stop();
+    if (engine) await engine.stop();
     process.exit(0);
   });
 
   process.on('SIGTERM', async () => {
     console.log('\n🛑 Shutting down automation engine...');
-    await engine.stop();
+    if (engine) await engine.stop();
     process.exit(0);
   });
 
@@ -394,7 +421,7 @@ async function main() {
   try {
     await engine.start();
     
-    // Keep the process running
+    // Keep the process running and log stats periodically
     setInterval(() => {
       const stats = engine.getStats();
       console.log(`💰 Current Stats - Revenue: $${stats.totalRevenue}, Profit: $${stats.totalProfit}, Products: ${stats.productsCreated}, Content: ${stats.contentPosted}`);
@@ -402,12 +429,5 @@ async function main() {
     
   } catch (error) {
     console.error('❌ Failed to start automation engine:', error);
-    process.exit(1);
   }
-}
-
-// Run the main function
-main().catch(error => {
-  console.error('❌ Fatal error:', error);
-  process.exit(1);
-});
+}, 2000); // Start automation 2 seconds after server starts
