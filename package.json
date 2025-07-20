@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "npm install",
+    "build": "echo 'Build complete'",
     "test": "echo \"No tests specified\" && exit 0"
   },
   "dependencies": {
@@ -32,8 +32,10 @@
     "dropshipping",
     "automation",
     "scraping",
-    "nodejs"
+    "nodejs",
+    "tiktok",
+    "ecommerce"
   ],
-  "author": "Your Name",
+  "author": "Colmeta",
   "license": "MIT"
 }
