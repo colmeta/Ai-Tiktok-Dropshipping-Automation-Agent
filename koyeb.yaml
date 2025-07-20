@@ -1,0 +1,81 @@
+# koyeb.yaml - Complete Deployment Configuration
+apiVersion: v1
+kind: App
+metadata:
+  name: selenium-dropshipping-automation
+spec:
+  services:
+    - name: dropshipping-agent
+      regions:
+        - fra
+      instance_types:
+        - nano
+      ports:
+        - port: 8000
+          protocol: http
+      env:
+        # 🔐 SOCIAL MEDIA CREDENTIALS (Required for posting)
+        - key: TIKTOK_EMAIL
+          value: your-tiktok-email@gmail.com
+        - key: TIKTOK_PASSWORD
+          value: your-tiktok-password
+        - key: INSTAGRAM_USERNAME
+          value: your-instagram-username
+        - key: INSTAGRAM_PASSWORD
+          value: your-instagram-password
+        - key: FACEBOOK_EMAIL
+          value: your-facebook-email@gmail.com
+        - key: FACEBOOK_PASSWORD
+          value: your-facebook-password
+        - key: YOUTUBE_EMAIL
+          value: your-youtube-email@gmail.com
+        - key: YOUTUBE_PASSWORD
+          value: your-youtube-password
+        
+        # 🎨 POD PROVIDER APIs (For automated product creation)
+        - key: PRINTFUL_API_KEY
+          value: your-printful-api-key
+        - key: PRINTIFY_API_KEY
+          value: your-printify-api-key
+        
+        # 🚀 SYSTEM CONFIGURATION
+        - key: NODE_ENV
+          value: production
+        - key: PORT
+          value: "8000"
+        - key: CHROME_BIN
+          value: /usr/bin/chromium-browser
+        - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+          value: "true"
+        
+        # 💰 REVENUE TRACKING
+        - key: ENABLE_REVENUE_TRACKING
+          value: "true"
+        - key: TARGET_MONTHLY_REVENUE
+          value: "150000"
+        
+      health_checks:
+        - grace_period: 60s
+          interval: 30s
+          method: GET
+          path: /health
+          port: 8000
+          protocol: http
+          restart_limit: 3
+          timeout: 5s
+      
+      git:
+        branch: main
+        build_command: npm install --production
+        run_command: npm start
+        repository: github.com/yourusername/selenium-dropshipping-automation
+      
+      instance_size: nano # Start small, scale up as revenue grows
+      scale:
+        min: 1
+        max: 3 # Auto-scale based on traffic
+      
+      # 💸 ZERO-COST OPTIMIZATION
+      resources:
+        memory: 512Mi # Minimal memory usage
+        cpu: 0.1 # Low CPU for cost efficiency
