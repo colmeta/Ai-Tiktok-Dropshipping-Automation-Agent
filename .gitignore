@@ -1,18 +1,10 @@
-# .gitignore - Security and Performance Optimization
-
-# 🔐 SECURITY - Never commit sensitive data
+# 🛡️ SECURITY - Never commit credentials
 .env
 .env.local
 .env.production
-.env.staging
-config/secrets.js
-credentials/
-keys/
-*.pem
-*.key
-*.cert
+.env.development
 
-# 📦 DEPENDENCIES
+# 📦 Dependencies
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -20,56 +12,60 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 
-# 🎯 AUTOMATION DATA (can be large)
-data/scraped-products.json
-data/trending-content.json
-data/generated-designs.json
-logs/automation.log
-logs/errors.log
+# 🗂️ Logs & Runtime
+logs/
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# 📁 Temporary files
 temp/
-cache/
-
-# 🌐 BROWSER & SELENIUM
-chromedriver*
-geckodriver*
-selenium-debug.log
+tmp/
+uploads/
 screenshots/
-downloads/
+*.tmp
+*.temp
 
-# 🚀 DEPLOYMENT
-dist/
-build/
-.vercel
-.netlify
-.koyeb/
+# 🖥️ OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# 💻 DEVELOPMENT
+# ⚙️ IDE & Editor files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
-Thumbs.db
 
-# 📊 MONITORING & ANALYTICS
-monitoring/
-analytics/
-reports/
-
-# 🔄 RUNTIME
-*.pid
-*.seed
-*.pid.lock
-pids/
-lib-cov/
+# 🚀 Build & Deploy
+dist/
+build/
 coverage/
+.nyc_output/
 
-# 📱 SOCIAL MEDIA ASSETS (can be regenerated)
-assets/generated/
-assets/temp/
-uploads/temp/
+# 🤖 Selenium specific
+selenium-debug.log
+geckodriver.log
+chromedriver.log
 
-# 🎨 POD DESIGNS (store in cloud/CDN)
-designs/generated/
-mockups/temp/
+# 🎥 Media files (large)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# 💰 Revenue data (sensitive)
+revenue.json
+analytics.json
+user-data/
