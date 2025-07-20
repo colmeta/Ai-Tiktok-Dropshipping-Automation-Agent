@@ -1,0 +1,54 @@
+# .github/workflows/deploy.yml - Automatic deployment to Koyeb
+name: 🚀 Deploy to Koyeb
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Check package security
+      run: npm audit --audit-level moderate
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: 🚀 Deploy to Koyeb
+      uses: koyeb/action-git-deploy@v1
+      with:
+        api-token: ${{ secrets.KOYEB_API_TOKEN }}
+        app-name: selenium-dropshipping-automation
+        service-name: dropshipping-agent
+        git-repository: ${{ github.repository }}
+        git-branch: main
+        
+    - name: ✅ Deployment Success Notification
+      if: success()
+      run: |
+        echo "🎉 Deployment successful!"
+        echo "💰 Money-making automation is now live!"
+        echo "📊 Dashboard: https://selenium-dropshipping-automation-dropshipping-agent.koyeb.app"
