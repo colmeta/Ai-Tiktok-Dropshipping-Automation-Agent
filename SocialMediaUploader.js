@@ -2,7 +2,8 @@
 import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
-import readline from 'readline';
+import readline from 'readline'
+import { SocialMediaManager } from './SocialMediaUploader.js';;
 
 class YouTubeUploader {
   constructor() {
